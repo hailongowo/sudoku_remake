@@ -53,6 +53,8 @@ class RatedGameResponse(BaseModel):
     rating_after: int | None = None
     rating_change: int | None = None
     formula_version: str | None = None
+    rating_eligible: bool | None = None
+    rating_ineligibility_reason: Literal["hint_used", "too_many_mistakes"] | None = None
     hints_used: int
     mistakes_made: int
     time_spent: int

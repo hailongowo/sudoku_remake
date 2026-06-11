@@ -23,6 +23,7 @@ create index if not exists idx_puzzles_rating
 
 -- Keep the solution_board protected. Do not add a public SELECT policy on puzzles.
 alter table public.puzzles enable row level security;
+revoke all privileges on table public.puzzles from public, anon, authenticated;
 
 insert into public.puzzles (
   puzzle_board,
@@ -516,4 +517,5 @@ as $$
   limit 1;
 $$;
 
-grant execute on function public.get_random_puzzle(text) to anon, authenticated;
+revoke all on function public.get_random_puzzle(text) from public;
+grant execute on function public.get_random_puzzle(text) to anon, authenticated, service_role;

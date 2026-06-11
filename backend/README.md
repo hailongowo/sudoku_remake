@@ -38,6 +38,12 @@ Incorrect rated moves are not stored and increment the server-side mistake count
 Casual puzzle state, notes, timer, hints, and mistakes remain entirely client-side;
 requesting another puzzle creates no database game record.
 
+Rated formula `elo-performance-v2` treats assisted or suspicious completions as
+losses: any hint, more than two mistakes, completion under 60 seconds, or completion
+after two hours. Direct access to `public.puzzles` is revoked from `anon` and
+`authenticated`; clients can only call the safe puzzle-fetch function, which never
+returns `solution_board`.
+
 Run unit tests with:
 
 ```powershell

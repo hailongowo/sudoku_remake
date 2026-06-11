@@ -23,6 +23,8 @@ def rated_game_payload(**extra):
         "rating_after": None,
         "rating_change": None,
         "formula_version": None,
+        "rating_eligible": True,
+        "rating_ineligibility_reason": None,
         "hints_used": 0,
         "mistakes_made": 0,
         "time_spent": 0,
