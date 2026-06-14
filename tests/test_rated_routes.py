@@ -130,7 +130,7 @@ def test_finish_has_no_client_board_or_statistics(monkeypatch):
             status="completed",
             rating_after=1020,
             rating_change=20,
-            formula_version="elo-performance-v1",
+            formula_version="elo-performance-v2",
             completed_at="2026-06-07T00:10:00Z",
         ),
     )

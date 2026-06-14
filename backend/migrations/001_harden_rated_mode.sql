@@ -235,7 +235,9 @@ as $$
 declare
   v_expected numeric;
   v_base_change integer;
+  v_loss_change integer;
   v_adjustment integer;
+  v_assisted_or_suspicious boolean;
 begin
   if p_elapsed_seconds < 0 or p_hints_used < 0 or p_mistakes_made < 0 then
     raise exception 'rated_invalid_statistics';
@@ -243,16 +245,23 @@ begin
 
   v_expected := 1.0 / (1.0 + power(10.0, (p_puzzle_rating - p_player_rating) / 400.0));
   v_base_change := round(32.0 * ((case when p_completed then 1 else 0 end) - v_expected));
+  v_loss_change := round(32.0 * (0 - v_expected));
+  v_assisted_or_suspicious :=
+    p_hints_used > 0
+    or p_mistakes_made > 2
+    or p_elapsed_seconds < 60
+    or p_elapsed_seconds > 7200;
 
-  if p_completed then
-    v_adjustment := greatest(
-      -8,
-      least(4, 4 - floor(p_elapsed_seconds / 300.0)::integer - p_hints_used * 3 - p_mistakes_made * 2)
-    );
-    return greatest(1, v_base_change + v_adjustment);
+  if not p_completed or v_assisted_or_suspicious then
+    return least(-1, v_loss_change);
   end if;
 
-  return least(-1, v_base_change);
+  v_adjustment := greatest(
+    -8,
+    least(4, 4 - floor(p_elapsed_seconds / 300.0)::integer - p_mistakes_made * 2)
+  );
+
+  return greatest(0, v_base_change + v_adjustment);
 end;
 $$;
 
@@ -279,6 +288,12 @@ as $$
     'rating_after', g.rating_after,
     'rating_change', g.rating_change,
     'formula_version', g.formula_version,
+    'rating_eligible', g.hints_used = 0 and g.mistakes_made <= 2,
+    'rating_ineligibility_reason', case
+      when g.hints_used > 0 then 'hint_used'
+      when g.mistakes_made > 2 then 'too_many_mistakes'
+      else null
+    end,
     'hints_used', g.hints_used,
     'mistakes_made', g.mistakes_made,
     'time_spent', coalesce(
@@ -372,7 +387,7 @@ begin
     time_spent = v_elapsed,
     rating_after = v_after,
     rating_change = v_after - v_game.rating_before,
-    formula_version = 'elo-performance-v1',
+    formula_version = 'elo-performance-v2',
     completed_at = now(),
     last_activity_at = now(),
     rating_applied_at = now()
@@ -397,7 +412,7 @@ begin
     v_game.rating_before,
     v_after,
     v_after - v_game.rating_before,
-    'elo-performance-v1',
+    'elo-performance-v2',
     p_status
   )
   on conflict (game_id) do nothing;
