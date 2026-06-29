@@ -100,6 +100,9 @@ class PlayerSummaryResponse(PlayerProfileResponse):
     rated_wins: int
     rated_losses: int
     peak_rating: int
+    suspended_at: datetime | None = None
+    suspended_by: UUID | None = None
+    suspension_reason: str | None = None
 
 
 class LeaderboardEntry(BaseModel):
@@ -121,3 +124,27 @@ class PoolCoverageResponse(BaseModel):
     max_rating: int | None
     healthy: bool
     coverage: list[PoolCoverageEntry]
+
+
+class AdminMeResponse(BaseModel):
+    id: UUID
+    display_name: str
+    rating: int
+    created_at: datetime
+    updated_at: datetime
+
+
+class AdminUserEntry(BaseModel):
+    id: UUID
+    display_name: str
+    rating: int
+    rating_rank: int
+    rated_games: int
+    rated_wins: int
+    rated_losses: int
+    peak_rating: int
+    suspended_at: datetime | None = None
+    suspended_by: UUID | None = None
+    suspension_reason: str | None = None
+    created_at: datetime
+    updated_at: datetime

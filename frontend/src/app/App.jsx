@@ -1,5 +1,8 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { AdminDashboard } from "../features/admin/AdminDashboard";
+import { AdminProtectedRoute } from "../features/admin/AdminProtectedRoute";
+import { AdminUsersPage } from "../features/admin/AdminUsersPage";
 import { AuthProvider } from "../features/auth/AuthProvider";
 import { LoginPage } from "../features/auth/LoginPage";
 import { ProtectedRoute } from "../features/auth/ProtectedRoute";
@@ -35,6 +38,8 @@ export function App() {
               <Route path="/login" element={<LoginPage />} />
               <Route path="/leaderboard" element={<LeaderboardPage />} />
               <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
+              <Route path="/admin" element={<AdminProtectedRoute><AdminDashboard /></AdminProtectedRoute>} />
+              <Route path="/admin/users" element={<AdminProtectedRoute><AdminUsersPage /></AdminProtectedRoute>} />
               <Route path="/guide" element={<GuidePage />} />
               <Route path="*" element={<NotFoundPage />} />
             </Routes>

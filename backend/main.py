@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from backend.config import Settings, get_settings
 from backend.database import get_supabase
+from backend.routes.admin import router as admin_router
 from backend.routes.casual import router as casual_router
 from backend.routes.leaderboard import router as leaderboard_router
 from backend.routes.players import router as players_router
@@ -24,6 +25,7 @@ def create_app(settings: Settings | None = None, validate_services: bool = True)
         allow_methods=["*"],
         allow_headers=["*"],
     )
+    application.include_router(admin_router)
     application.include_router(rated_router)
     application.include_router(casual_router)
     application.include_router(players_router)

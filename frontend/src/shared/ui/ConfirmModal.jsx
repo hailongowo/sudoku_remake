@@ -1,4 +1,4 @@
-export function ConfirmModal({ title, children, confirmLabel = "Confirm", cancelLabel = "Cancel", danger = false, onConfirm, onCancel, busy = false }) {
+export function ConfirmModal({ title, children, confirmLabel = "Confirm", cancelLabel = "Cancel", danger = false, onConfirm, onCancel, busy = false, confirmDisabled = false }) {
   return (
     <div className="fixed inset-0 z-50 grid place-items-center bg-slate-950/40 p-4">
       <section role="dialog" aria-modal="true" className="card w-full max-w-md p-6">
@@ -8,7 +8,7 @@ export function ConfirmModal({ title, children, confirmLabel = "Confirm", cancel
           <button type="button" className="btn btn-secondary" onClick={onCancel}>
             {cancelLabel}
           </button>
-          <button type="button" className={`btn ${danger ? "btn-danger" : "btn-primary"}`} disabled={busy} onClick={onConfirm}>
+          <button type="button" className={`btn ${danger ? "btn-danger" : "btn-primary"}`} disabled={busy || confirmDisabled} onClick={onConfirm}>
             {busy ? "Working..." : confirmLabel}
           </button>
         </div>

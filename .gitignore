@@ -11,3 +11,6 @@ frontend/dist/
 frontend/.env
 frontend/node_modules
 frontend/dist
+
+backend/migrations
+backend/supabase_puzzles_seed.sql

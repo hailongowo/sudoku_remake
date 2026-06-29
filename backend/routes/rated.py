@@ -22,6 +22,7 @@ RPC_ERRORS: tuple[tuple[str, int, str], ...] = (
     ("rated_profile_not_found", status.HTTP_404_NOT_FOUND, "User profile not found"),
     ("rated_game_not_found", status.HTTP_404_NOT_FOUND, "Rated game not found"),
     ("rated_no_puzzles", status.HTTP_503_SERVICE_UNAVAILABLE, "No rated puzzles available"),
+    ("admin_user_suspended", status.HTTP_403_FORBIDDEN, "This account is suspended from rated play"),
     ("rated_game_incomplete", status.HTTP_409_CONFLICT, "The rated puzzle is not complete"),
     ("rated_game_not_active", status.HTTP_409_CONFLICT, "The rated game is not active"),
     ("rated_game_complete", status.HTTP_409_CONFLICT, "The rated puzzle is already complete"),

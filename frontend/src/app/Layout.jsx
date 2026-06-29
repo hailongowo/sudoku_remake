@@ -1,5 +1,7 @@
 import { Link, NavLink } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "../features/auth/AuthProvider";
+import { apiRequest } from "../shared/api/client";
 
 const navItems = [
   ["Home", "/"],
@@ -10,7 +12,13 @@ const navItems = [
 ];
 
 export function Layout({ children }) {
-  const { user, signOut } = useAuth();
+  const { user, token, signOut } = useAuth();
+  const admin = useQuery({
+    queryKey: ["admin", "me"],
+    queryFn: ({ signal }) => apiRequest("/admin/me", { token, signal }),
+    enabled: Boolean(user && token),
+    retry: false,
+  });
 
   return (
     <div className="min-h-screen">
@@ -36,6 +44,11 @@ export function Layout({ children }) {
                 <NavLink to="/profile" className={({ isActive }) => `rounded-lg px-3 py-2 font-bold ${isActive ? "bg-blue-50 text-brand" : "text-slate-600"}`}>
                   Profile
                 </NavLink>
+                {admin.isSuccess ? (
+                  <NavLink to="/admin" className={({ isActive }) => `rounded-lg px-3 py-2 font-bold ${isActive ? "bg-blue-50 text-brand" : "text-slate-600"}`}>
+                    Admin
+                  </NavLink>
+                ) : null}
                 <button type="button" className="btn btn-secondary py-2 text-sm" onClick={signOut}>
                   Sign out
                 </button>
